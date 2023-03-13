@@ -47,8 +47,3 @@ assert max_mean_subarray([4, 5, -3, 2, 6, 1], 2) == 4.5
 assert max_mean_subarray([4, 5, -3, 2, 6, 1], 3) == 3
 assert max_mean_subarray([1, 1, 1, 1, -1, -1, 2, -1, -1], 3) == 1
 assert max_mean_subarray([1, 1, 1, 1, -1, -1, 2, -1, -1, 6], 5) == 1
-
-
-
-
-
