@@ -1,56 +1,67 @@
 """
 Ahmed Hashim
-02-25-2023
-MergeIntervals:
-Given a list of integer pairs representing the low and high end of an interval, inclusive, return a list in which overlapping intervals are merged.
+03-12-2023
+KAnagrams:
+Two strings are considered to be “k-anagrams” if they can be made into anagrams by changing at most k characters in one of the strings. Given two strings and an integer k, determine if they are k-anagrams.
 
-Time Complexity: O(nlogn), where n is the number of intervals
+Time complexity: O(n)
 
-Space Complexity: O(n), where n is the number of intervals
+The space complexity: O(n)
 
-Technique: Sorting and Merging Overlapping Intervals
 
+
+
+Technique: Hashing technique 
 
 Time Spent:
 roughly 50 minutes
 
 Approach:
 
-1) Check if the length of both strings is the same. If not, return False.
-2) Create an array of size 26 to keep track of the frequency count of each character in the first string.
-3) Iterate over the characters in the first string and increment the frequency count of each character in the array.
-4) Initialize a negative frequency count to 0.
-5) Iterate over the characters in the second string and decrement the frequency count of each character in the array.
-6) If the frequency count becomes negative, increment the negative frequency count.
-7) If the negative frequency count exceeds k, return False.
-8) If the loop completes, return True.
+
+1) Check if the lengths of the two input strings, s1 and s2, are equal. If not, return False as they can't be k-anagrams.
+
+2) Create two dictionaries to store the frequency of each character in s1 and s2.
+
+3)Traverse s1 and s2 and update their respective frequency dictionaries.
+
+4) Traverse one of the frequency dictionaries, and for each character in the dictionary:
+
+a. If the character is not in the other frequency dictionary, add its frequency to a counter 'count'.
+
+b. If the character is in both frequency dictionaries, calculate the absolute difference between their frequencies, and add it to 'count'.
+
+c. If 'count' exceeds k, return False, as the strings are not k-anagrams.
+
+5) If the function has not returned False at this point, it means the two strings are k-anagrams of each other, and we can return True.
 """
-def merge_intervals(intervals):
-    if not intervals:
-        return []
+def k_anagrams(s1, s2, k):
+    if len(s1) != len(s2):
+        return False
     
-    # Sort intervals by start time
-    intervals.sort(key=lambda a : a[0])
-
-    # Merge overlapping intervals
-    res = [list(intervals[0])]
-    for i in range(1, len(intervals)):
-        if intervals[i][0] <= res[-1][1]:
-            res[-1][1] = max(intervals[i][1], res[-1][1])
+    freq1, freq2 = {}, {}
+    count = 0
+    for letter in s1:
+        freq1[letter] = freq1.get(letter, 0) + 1
+    for letter in s2:
+        freq2[letter] = freq2.get(letter, 0) + 1
+    
+    for letter in freq1:
+        if letter not in freq2:
+            count += freq1[letter]
         else:
-            res.append(list(intervals[i]))
+            count += abs(freq1[letter] - freq2[letter])
+        
+        if count > k:
+            return False
+    
+    return True
 
-    # Convert list back to tuple
-    for i in range(len(res)):
-        res[i] = tuple(res[i])
-
-    return res
-
-# Test cases
-assert merge_intervals([(2, 3), (4, 8), (1, 2), (5, 7), (9, 12)]) == [(1, 3), (4, 8), (9, 12)]
-assert merge_intervals([(5, 8), (6, 10), (2, 4), (3, 6)]) == [(2, 10)]
-assert merge_intervals([(10, 12), (5, 6), (7, 9), (1, 3)]) == [(1, 3), (5, 6), (7, 9), (10, 12)]
-assert merge_intervals([]) == []
-assert merge_intervals([(1, 2)]) == [(1, 2)]
+#Test Cases
+assert k_anagrams("apple", "peach", 1) == False
+assert k_anagrams("apple", "peach", 2) == True
+assert k_anagrams("cat", "dog", 3) == True
+assert k_anagrams("debit curd", "bad credit", 1) == True
+assert k_anagrams("baseball", "basketball", 2) == False
 
 
